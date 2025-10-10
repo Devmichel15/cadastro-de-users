@@ -1,0 +1,96 @@
+*{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body{
+  display: flex;
+  flex-direction: column;
+  background-color: #F9FAFB;
+  height: 100vh;
+}
+
+button{
+  cursor: pointer;
+}
+
+header {
+  width: 100%;
+  height: 70px;
+  background-color: #111827;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 90vh;
+}
+
+.formInfosUsers{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #A78BFA;
+  width: 100%;
+  max-width: 350px;
+  height: 250px;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+
+.formInfosUsers input{
+  margin-bottom: 10px;
+  padding: 5px 12px;
+  outline: none;
+  border: 1px solid #1F2937;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.formInfosUsers button{
+  padding: 10px 20px;
+  border: none;
+  background-color: #8B5CF6;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.formInfosUsers button:hover{
+  background-color: #6538ce;
+}
+
+.list-users {
+  display: flex;
+  flex-direction: column;
+}
+
+.user{
+  margin-bottom: 20px;
+  background-color: #1F2937;
+  padding: 12px 24px;
+  border-radius: 12px;
+  color: white;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+  justify-content: space-between;
+}
+
+.user button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #8B5CF6;
+  border-radius: 10px;
+  margin-top: 20px;
+}
