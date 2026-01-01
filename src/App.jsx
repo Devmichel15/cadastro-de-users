@@ -1,53 +1,73 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [age, setAge] = useState("");
-
+  const [pass, setPass] = useState("");
   const [users, setUsers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
-  const getDatasUser = (e) => {
+  // criar usuário
+  const createUser = async (e) => {
     e.preventDefault();
-    const nameUser = name;
-    const emailUser = email;
-    const ageUser = age;
 
-    const newUser = {
-      name: nameUser,
-      email: emailUser,
-      age: ageUser,
-    };
+    if (!name || !email || !pass)
+      return console.log("Preencha todos os campos");
 
-    setUsers([...users, newUser]);
-    localStorage.setItem("users", JSON.stringify([...users, newUser]));
-    setName("");
-    setEmail("");
-    setAge("");
+    try {
+      const response = await fetch("https://api-crud-users-2q03.onrender.com/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password: pass }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log("Erro ao criar usuário:", data.error);
+        return;
+      }
+
+      // ✅ Atualiza o state instantaneamente
+      setUsers((prevUsers) => [...prevUsers, data]);
+
+      // Limpa os inputs
+      setName("");
+      setEmail("");
+      setPass("");
+
+      // Mostra o modal por 2 segundos
+      setShowModal(true);
+      setTimeout(() => setShowModal(false), 2000);
+    } catch (err) {
+      console.log("Erro na requisição:", err);
+    }
   };
 
-  const removeUser = (index) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-
-    // remove 1 item a partir do índice
-    users.splice(index, 1);
-
-    // atualiza o localStorage com o novo array
-    localStorage.setItem("users", JSON.stringify(users));
-
-    // opcional: atualizar o estado do React também
-    setUsers(users);
+  // buscar usuários
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("http://localhost:5500/users");
+      const data = await response.json();
+      setUsers(data);
+    } catch (err) {
+      console.log("Erro ao buscar usuários:", err);
+    }
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <div>
       <header>
-        <h2>cadastro de usuários </h2>
+        <h2>Cadastro de Usuários</h2>
       </header>
 
       <section className="main">
-        <form className="formInfosUsers" onSubmit={getDatasUser}>
+        <form className="formInfosUsers" onSubmit={createUser}>
           <input
             type="text"
             placeholder="O seu nome:"
@@ -63,10 +83,10 @@ function App() {
             required
           />
           <input
-            type="number"
-            placeholder="A sua idade:"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
+            type="password"
+            placeholder="A sua senha:"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
             required
           />
           <button type="submit">Cadastrar</button>
@@ -74,8 +94,8 @@ function App() {
 
         <h3>Nossos Usuários</h3>
         <div className="list-users">
-          {users.map((user, index) => (
-            <div key={index} className="user">
+          {users.map((user) => (
+            <div key={user.id} className="user">
               <div>
                 <p>
                   O seu nome: <b>{user.name}</b>
@@ -83,14 +103,16 @@ function App() {
                 <p>
                   O seu email: <b>{user.email}</b>
                 </p>
-                <p>
-                  A sua idade: <b>{user.age}</b>
-                </p>
               </div>
-              <button onClick={() => removeUser(index)}>X</button>
             </div>
           ))}
         </div>
+
+        {showModal && (
+          <div className="modal-user">
+            <b>Usuário criado com sucesso!</b>
+          </div>
+        )}
       </section>
     </div>
   );
