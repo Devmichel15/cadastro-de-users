@@ -48,7 +48,7 @@ function App() {
   // buscar usuários
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:5500/users");
+      const response = await fetch("https://api-crud-users-2q03.onrender.com/users");
       const data = await response.json();
       setUsers(data);
     } catch (err) {
